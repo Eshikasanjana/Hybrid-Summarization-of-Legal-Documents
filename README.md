@@ -2,6 +2,11 @@
 
 This project implements a hybrid summarization framework designed to process lengthy, formally structured legal and legislative documents. By integrating extractive techniques with abstractive refinement, the system produces summaries that maintain high factual fidelity while ensuring linguistic fluency.
 
+## 🚀 Try it Now
+Ready to explore the model? Run the code directly in your browser:
+
+[**Launch Interactive Notebook →**](https://colab.research.google.com/drive/1XMnGpHD1pmBh_b5MeS035MUwJI_l5Epc?usp=sharing)
+
 ## Overview
 
 Legal documents contain domain-specific terminology and hierarchical organization that make automatic summarization difficult. Traditional extractive methods ensure factual correctness but often produce disjointed outputs, while abstractive methods improve readability but may alter legal meaning. 
@@ -55,7 +60,4 @@ os.environ["GEMINI_API_KEY"] = "YOUR_GEMINI_KEY"
 os.environ["HF_TOKEN"] = "YOUR_HF_TOKEN"
 ```
 
-## 🚀 Try it Now
-Ready to explore the model? Run the code directly in your browser:
 
-[**Launch Interactive Notebook →**](https://colab.research.google.com/drive/1XMnGpHD1pmBh_b5MeS035MUwJI_l5Epc?usp=sharing)
