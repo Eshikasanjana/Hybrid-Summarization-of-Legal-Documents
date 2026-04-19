@@ -53,3 +53,9 @@ The system is implemented using modular scripts and is optimized for **Google Co
 import os
 os.environ["GEMINI_API_KEY"] = "YOUR_GEMINI_KEY"
 os.environ["HF_TOKEN"] = "YOUR_HF_TOKEN"
+```
+
+## 🚀 Try it Now
+Ready to explore the model? Run the code directly in your browser:
+
+[**Launch Interactive Notebook →**](https://colab.research.google.com/drive/1XMnGpHD1pmBh_b5MeS035MUwJI_l5Epc?usp=sharing)
