@@ -1,0 +1,11 @@
+google-genai
+datasets
+transformers
+rouge
+sentence-transformers
+gradio
+torch
+pandas
+nltk
+scikit-learn
+pyarrow
