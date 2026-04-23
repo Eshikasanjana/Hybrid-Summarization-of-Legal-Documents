@@ -21,7 +21,7 @@ export default function App() {
     setLoading(true);
 
     try {
-      const apiUrl = `${HF_SPACE_URL.replace(/\/$/, '')}/run/predict`;
+      const apiUrl = `${HF_SPACE_URL.replace(/\/$/, '')}/call/predict`;
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
