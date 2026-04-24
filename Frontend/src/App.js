@@ -24,7 +24,7 @@ export default function App() {
       const base = HF_SPACE_URL.replace(/\/$/, '');
     
       // Step 1 — POST to get event ID
-      const postRes = await fetch(base + '/call/run_predict', {
+      const postRes = await fetch(base + '/call/run_pipeline', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data: [text, 10, 4] }),
@@ -33,7 +33,7 @@ export default function App() {
       const { event_id } = await postRes.json();
     
       // Step 2 — GET results using event ID
-      const getRes = await fetch(base + '/call/run_predict/' + event_id);
+      const getRes = await fetch(base + '/call/run_pipeline/' + event_id);
       if (!getRes.ok) throw new Error('Result error: ' + getRes.status);
       const resultText = await getRes.text();
     
