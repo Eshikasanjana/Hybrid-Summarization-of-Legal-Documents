@@ -21,17 +21,35 @@ export default function App() {
     setLoading(true);
 
     try {
-      const apiUrl = `${HF_SPACE_URL.replace(/\/$/, '')}/call/predict`;
-      const response = await fetch(apiUrl, {
+      const base = HF_SPACE_URL.replace(/\/$/, '');
+    
+      // Step 1 — POST to get event ID
+      const postRes = await fetch(base + '/call/predict', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data: [text, 10, 4] }),
       });
-
-      if (!response.ok) throw new Error(`Server error: ${response.status}`);
-      const data = await response.json();
-      const [, , hybrid, evaluation] = data.data;
-
+      if (!postRes.ok) throw new Error('Server error: ' + postRes.status);
+      const { event_id } = await postRes.json();
+    
+      // Step 2 — GET results using event ID
+      const getRes = await fetch(base + '/call/predict/' + event_id);
+      if (!getRes.ok) throw new Error('Result error: ' + getRes.status);
+      const resultText = await getRes.text();
+    
+      // Parse the SSE stream response
+      const lines = resultText.split('\n');
+      let outputData = null;
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith('event: complete') && lines[i + 1] && lines[i + 1].startsWith('data:')) {
+          outputData = JSON.parse(lines[i + 1].replace('data: ', '').trim());
+          break;
+        }
+      }
+      if (!outputData) throw new Error('No result returned from backend.');
+      const hybrid = outputData[2];
+      const evaluation = outputData[3];
+    
       const scores = parseEvaluation(evaluation);
       setResult({ meaning: hybrid, evaluation, scores });
 
