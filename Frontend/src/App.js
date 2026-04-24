@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
+import { Client } from "@gradio/client";
 
 const HF_SPACE_URL = 'https://eshsanjana-legal-summarizer.hf.space';
 
@@ -20,35 +21,18 @@ export default function App() {
     setResult(null);
     setLoading(true);
 
+    
+    // inside handleSubmit, replace the try block:
     try {
-      const base = HF_SPACE_URL.replace(/\/$/, '');
-    
-      // Step 1 — POST to get event ID
-      const postRes = await fetch(base + '/call/run_pipeline', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: [text, 10, 4] }),
+      const client = await Client.connect("eshsanjana/legal-summarizer");
+      const result = await client.predict("/run_pipeline", {
+        text: text,
+        num_clusters: 10,
+        num_beams: 4,
       });
-      if (!postRes.ok) throw new Error('Server error: ' + postRes.status);
-      const { event_id } = await postRes.json();
     
-      // Step 2 — GET results using event ID
-      const getRes = await fetch(base + '/call/run_pipeline/' + event_id);
-      if (!getRes.ok) throw new Error('Result error: ' + getRes.status);
-      const resultText = await getRes.text();
-    
-      // Parse the SSE stream response
-      const lines = resultText.split('\n');
-      let outputData = null;
-      for (let i = 0; i < lines.length; i++) {
-        if (lines[i].startsWith('event: complete') && lines[i + 1] && lines[i + 1].startsWith('data:')) {
-          outputData = JSON.parse(lines[i + 1].replace('data: ', '').trim());
-          break;
-        }
-      }
-      if (!outputData) throw new Error('No result returned from backend.');
-      const hybrid = outputData[2];
-      const evaluation = outputData[3];
+      const hybrid = result.data[2];
+      const evaluation = result.data[3];
     
       const scores = parseEvaluation(evaluation);
       setResult({ meaning: hybrid, evaluation, scores });
