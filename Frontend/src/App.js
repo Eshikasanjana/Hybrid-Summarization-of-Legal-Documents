@@ -47,17 +47,30 @@ export default function App() {
   const parseEvaluation = (evalText) => {
     const scores = { accuracy: null, coverage: null, clarity: null, overall: '' };
     if (!evalText) return scores;
-    const lines = evalText.split('\n');
+  
+    // Strip markdown bold/italic
+    const cleaned = evalText.replace(/\*\*/g, '').replace(/\*/g, '');
+    const lines = cleaned.split('\n');
+  
     for (const line of lines) {
       const match = line.match(/(\d+(\.\d+)?)\s*\/\s*5/);
       const score = match ? parseFloat(match[1]) : null;
-      if (/accuracy/i.test(line) && score) scores.accuracy = { val: score, note: line.replace(/.*?[-:]\s*/, '').replace(/\d+\/5/, '').trim() };
-      else if (/coverage/i.test(line) && score) scores.coverage = { val: score, note: line.replace(/.*?[-:]\s*/, '').replace(/\d+\/5/, '').trim() };
-      else if (/clarity/i.test(line) && score) scores.clarity = { val: score, note: line.replace(/.*?[-:]\s*/, '').replace(/\d+\/5/, '').trim() };
-      else if (/overall/i.test(line)) scores.overall = line.replace(/overall[:\s]*/i, '').trim();
+      const note = line.replace(/.*?[-:]\s*/, '').replace(/\d+(\.\d+)?\/5/, '').trim();
+  
+      if (/accuracy/i.test(line) && score)
+        scores.accuracy = { val: score, note };
+      else if (/coverage/i.test(line) && score)
+        scores.coverage = { val: score, note };
+      else if (/clarity/i.test(line) && score)
+        scores.clarity = { val: score, note };
+      else if (/overall/i.test(line) && !score)
+        scores.overall = line.replace(/overall[:\s]*/i, '').trim();
     }
+  
     if (!scores.overall) {
-      const parts = evalText.split('\n').filter(l => l.trim() && !/\d\/5/.test(l) && !/accuracy|coverage|clarity/i.test(l));
+      const parts = cleaned.split('\n').filter(
+        l => l.trim() && !/\d\/5/.test(l) && !/accuracy|coverage|clarity/i.test(l)
+      );
       scores.overall = parts.join(' ').trim();
     }
     return scores;
