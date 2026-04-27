@@ -111,8 +111,8 @@ export default function App() {
       <main className="main">
         <section className="hero">
           <h2 className="hero-title">Can't understand a <em>legal document?</em></h2>
-          <p className="hero-sub">Paste any legal text — a contract clause, a bill, an agreement — and get a plain English explanation instantly.</p>
-        </section>
+          <p className="hero-sub">Built for US legislative bills, government acts, and formal legal statutes — paste any legal document and get a plain English summary with AI reliability scoring.</p>    
+      </section>
 
         <div className="how-strip">
           <div className="how-step"><div className="how-icon" style={{ background: '#e8f0fb' }}>📋</div><span>Paste legal text</span></div>
